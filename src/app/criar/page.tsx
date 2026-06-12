@@ -376,12 +376,12 @@ function StepReview({ occasion, theme, title, photos, occasions, themes }: any) 
       </div>
 
       <div className="flex justify-center gap-4 mt-10">
-        <Link href="/preview/demo" className="btn-outline flex items-center gap-2">
+        <Link href="/presente/demo" className="btn-outline flex items-center gap-2">
           <Eye className="w-4 h-4" /> Ver prévia
         </Link>
-        <button className="btn-primary flex items-center gap-2">
+        <Link href="/presente/demo" className="btn-primary flex items-center gap-2">
           <Gift className="w-4 h-4" /> Publicar presente ✨
-        </button>
+        </Link>
       </div>
     </motion.div>
   )
