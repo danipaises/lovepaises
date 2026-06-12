@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --roxo: #7C3AED;
+  --rosado: #F472B6;
+  --noite: #1E1B4B;
+  --dourado: #F59E0B;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: #1f2937;
+  background: #fafafa;
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-amor-roxo text-white px-8 py-4 rounded-full font-semibold 
+           shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 
+           transition-all duration-300 disabled:opacity-50;
+  }
+  .btn-outline {
+    @apply border-2 border-amor-roxo text-amor-roxo px-8 py-4 rounded-full 
+           font-semibold hover:bg-amor-roxo hover:text-white 
+           transition-all duration-300;
+  }
+  .btn-dourado {
+    @apply bg-amor-dourado text-amor-noite px-8 py-4 rounded-full font-bold 
+           shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 
+           transition-all duration-300;
+  }
+  .section {
+    @apply py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto;
+  }
+  .card {
+    @apply bg-white rounded-3xl shadow-lg p-8 hover:shadow-2xl 
+           transition-all duration-500;
+  }
+  .glass {
+    @apply bg-white/80 backdrop-blur-lg rounded-3xl shadow-lg;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--roxo);
+  border-radius: 4px;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.stars-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle var(--duration) ease-in-out infinite;
+  animation-delay: var(--delay);
+}
