@@ -89,7 +89,13 @@ export default function PresentePage() {
     <div className="bg-gradient-to-b from-amor-soft to-white">
       {/* HERO */}
       <motion.section style={{ opacity: headerOpacity }} className="min-h-screen relative overflow-hidden bg-gradient-to-br from-amor-rosado/20 via-amor-soft to-amor-glow flex items-center justify-center">
-        <motion.HeartIcon />
+        <motion.div
+          animate={{ scale: [1, 1.3, 1], rotate: [0, -10, 10, 0] }}
+          transition={{ repeat: Infinity, duration: 3 }}
+          className="absolute top-10 left-1/2 -translate-x-1/2"
+        >
+          <Heart className="w-16 h-16 text-amor-rosado fill-amor-rosado/30" />
+        </motion.div>
         <div className="text-center px-4">
           <motion.span
             initial={{ opacity: 0, y: 30 }}
