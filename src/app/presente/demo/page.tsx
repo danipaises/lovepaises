@@ -2,13 +2,17 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { Heart, ChevronDown, Clock, Sparkles, QrCode, Share2, Play, Music } from 'lucide-react'
+import { Heart, ChevronDown, Clock, MapPin, Star, Sparkles, Play, Pause, Music, Calendar, Users, Gift } from 'lucide-react'
+import { useState } from 'react'
 
-const demo = {
-  title: 'Nossa História de Amor',
-  from: 'Ana',
-  to: 'Pedro',
-  message: 'Desde o dia em que te conheci, minha vida ganhou cor. Cada momento ao seu lado é um presente que guardo no coração. Você é a melhor parte dos meus dias, o sorriso que ilumina minhas manhãs e o abraço que acalma minhas noites. Aprendi que o amor não está nos grandes gestos, mas nos pequenos detalhes do dia a dia. Te amo hoje, amanhã e sempre.',
+const data = {
+  title: 'Nossa Sintonia',
+  from: 'Dani',
+  to: 'Você',
+  songName: 'Perfect',
+  artist: 'Ed Sheeran',
+  songUrl: 'https://www.youtube.com/watch?v=2Vv-BfVoq4g',
+  message: 'Desde o momento em que nos conhecemos, soube que você era especial. Cada risada, cada conversa, cada momento compartilhado me fez perceber o quanto você é importante na minha vida. Obrigado por ser exatamente quem você é. Este presente é um pouquinho do que sinto por você.',
   photos: [
     'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800',
     'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=800',
@@ -17,199 +21,256 @@ const demo = {
     'https://images.unsplash.com/photo-1537633552985-d660f013a6e0?w=800',
   ],
   timeline: [
-    { date: '2022-09-15', title: 'Dia que nos conhecemos', desc: 'Na festa de aniversário de um amigo em comum', icon: '🥂' },
-    { date: '2022-11-20', title: 'Primeiro beijo', desc: 'No parque Ibirapuera, às 18h', icon: '💋' },
-    { date: '2023-03-12', title: 'Primeira viagem juntos', desc: 'Praia de Maresias', icon: '🏖️' },
-    { date: '2023-09-15', title: '1 ano de namoro', desc: 'Jantar especial no nosso restaurante', icon: '🥂' },
-    { date: '2024-02-14', title: 'Dia dos Namorados', desc: 'Troca de cartas escritas à mão', icon: '💌' },
-    { date: '2024-12-25', title: 'Primeiro Natal juntos', desc: 'Ceia em família, melhor Natal', icon: '🎄' },
+    { date: '2022-09-15', title: 'Nos conhecemos', desc: 'Naquele dia que mudou tudo' },
+    { date: '2022-12-25', title: 'Primeiro Natal', desc: 'Troca de presentes inesquecível' },
+    { date: '2023-06-12', title: 'Dia dos Namorados', desc: 'Jantar especial à luz de velas' },
+    { date: '2024-01-01', title: 'Ano novo juntos', desc: 'Começamos o ano abraçados' },
   ],
-  music: "Can't Help Falling in Love",
-  songUrl: 'https://www.youtube.com/watch?v=vGJTaP6anOU',
+  stats: [
+    { label: 'Dias juntos', value: '1.374', icon: '📅' },
+    { label: 'Mensagens trocadas', value: '12.847', icon: '💬' },
+    { label: 'Fotos juntos', value: '342', icon: '📸' },
+    { label: 'Filmes assistidos', value: '87', icon: '🎬' },
+    { label: 'Músicas da nossa playlist', value: '53', icon: '🎵' },
+    { label: 'Viagens juntos', value: '8', icon: '✈️' },
+  ],
+  qualities: ['Engraçado', 'Carinhoso', 'Leal', 'Inteligente', 'Paciente', 'Aventureiro'],
 }
 
-const daysTogether = Math.floor((Date.now() - new Date('2022-09-15').getTime()) / (1000 * 60 * 60 * 24))
+export default function DemoGift() {
+  const [section, setSection] = useState(0)
+  const [revealed, setRevealed] = useState(false)
+  const totalSections = 5
 
-export default function DemoPage() {
+  const nextSection = () => { if (section < totalSections - 1) setSection(section + 1) }
+
   return (
-    <div className="bg-gradient-to-b from-amor-soft via-white to-amor-soft pb-20">
-      <Intro />
-      <Hero />
-      <Counter days={daysTogether} />
-      <SpotifyTimeline />
-      <Gallery />
-      <MessageSection />
-      <FinalSection days={daysTogether} />
-      <Banner />
+    <div className="bg-black text-white min-h-screen overflow-hidden">
+      {/* Fixed header bar */}
+      <div className="fixed top-0 left-0 right-0 z-40 bg-black/80 backdrop-blur-md border-b border-gray-800 px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Heart className="w-5 h-5 text-green-500 fill-green-500" />
+          <span className="text-sm font-bold">Love<span className="text-green-500">Países</span></span>
+        </div>
+        <div className="flex gap-1">
+          {[0,1,2,3,4].map(i => (
+            <div key={i} className={`w-2 h-2 rounded-full transition-all ${i <= section ? 'bg-green-500 w-6' : 'bg-gray-700'}`} />
+          ))}
+        </div>
+        <Link href="/" className="text-xs text-gray-500 hover:text-green-400">Sair</Link>
+      </div>
+
+      {/* Intro overlay */}
+      {!revealed && (
+        <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center text-center px-4">
+          {[...Array(30)].map((_, i) => (
+            <motion.div key={i} className="absolute bg-green-500 rounded-full"
+              style={{ left: Math.random()*100+'%', top: Math.random()*100+'%', width: Math.random()*2+1+'px', height: Math.random()*2+1+'px' }}
+              animate={{ opacity: [0,0.6,0] }} transition={{ repeat: Infinity, duration: 2+Math.random()*3, delay: Math.random()*2 }} />
+          ))}
+          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', delay: 0.3 }} className="text-7xl mb-6">🎁</motion.div>
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="text-gray-400 mb-1">{data.from} preparou algo especial</motion.p>
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="text-3xl font-bold mb-8">Para {data.to}</motion.p>
+          <motion.button initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}
+            onClick={() => setRevealed(true)}
+            className="bg-green-500 text-black px-12 py-4 rounded-full text-xl font-bold hover:bg-green-400 transition-all flex items-center gap-2">
+            <Gift className="w-5 h-5" /> Abrir presente
+          </motion.button>
+        </div>
+      )}
+
+      {revealed && (
+        <div className="pt-14">
+          {/* SECTION 1: Capa Spotify */}
+          {section === 0 && <SectionCapa nextSection={nextSection} />}
+          {/* SECTION 2: Timeline */}
+          {section === 1 && <SectionTimeline nextSection={nextSection} />}
+          {/* SECTION 3: Stats */}
+          {section === 2 && <SectionStats nextSection={nextSection} />}
+          {/* SECTION 4: Carta */}
+          {section === 3 && <SectionCarta nextSection={nextSection} />}
+          {/* SECTION 5: Final */}
+          {section === 4 && <SectionFinal />}
+        </div>
+      )}
     </div>
   )
 }
 
-function Intro() {
+function SectionCapa({ nextSection }: { nextSection: () => void }) {
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-amor-noite via-amor-roxo to-amor-rosado text-white text-center px-4">
-      {[...Array(40)].map((_, i) => (
-        <motion.div key={i} className="absolute bg-white rounded-full"
-          style={{ left: Math.random() * 100 + '%', top: Math.random() * 100 + '%', width: Math.random() * 3 + 1 + 'px', height: Math.random() * 3 + 1 + 'px' }}
-          animate={{ opacity: [0.1, 0.8, 0.1], scale: [0.8, 1.2, 0.8] }}
-          transition={{ repeat: Infinity, duration: 2 + Math.random() * 3, delay: Math.random() * 3 }} />
-      ))}
-      <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.3, type: 'spring' }} className="text-8xl mb-6">🎁</motion.div>
-      <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="text-xl mb-2">{demo.from} preparou uma surpresa</motion.p>
-      <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="text-4xl font-display font-bold">Para você, {demo.to}</motion.p>
-      <motion.button
-        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}
-        onClick={() => { const el = document.querySelector('.intro-overlay') as HTMLElement; if (el) el.style.display = 'none' }}
-        className="mt-10 bg-white text-amor-roxo px-12 py-4 rounded-full text-lg font-bold shadow-2xl hover:scale-105 transition-transform flex items-center gap-2"
-      >
-        <Heart className="w-5 h-5 fill-amor-roxo" /> Abrir surpresa
-      </motion.button>
-    </div>
-  )
-}
-
-function Hero() {
-  return (
-    <section className="min-h-screen relative overflow-hidden bg-gradient-to-br from-amor-rosado/20 via-amor-soft to-amor-glow flex items-center justify-center">
-      <motion.div animate={{ scale: [1, 1.3, 1], rotate: [0, -10, 10, 0] }} transition={{ repeat: Infinity, duration: 3 }} className="absolute top-20 left-1/2 -translate-x-1/2">
-        <Heart className="w-20 h-20 text-amor-rosado/30 fill-amor-rosado/20" />
-      </motion.div>
-      <div className="text-center px-4">
-        <motion.span initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="inline-block text-6xl mb-6">💕</motion.span>
-        <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-5xl md:text-7xl font-display font-bold text-amor-noite mb-4">{demo.title}</motion.h1>
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="text-lg text-gray-500">De {demo.from} para {demo.to}</motion.p>
-        <motion.div animate={{ y: [0, 10, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="mt-16">
-          <ChevronDown className="w-8 h-8 text-amor-roxo mx-auto" />
+    <section className="min-h-[90vh] flex flex-col items-center justify-center px-4 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-green-900/20 via-black to-black" />
+      <div className="relative z-10 text-center">
+        <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}>
+          <div className="w-64 h-64 mx-auto mb-8 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-700 shadow-2xl shadow-green-500/20 flex items-center justify-center">
+            <Music className="w-32 h-32 text-white/80" />
+          </div>
+        </motion.div>
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="text-green-500 text-sm font-semibold uppercase tracking-widest mb-3">
+          {data.from} apresenta
+        </motion.p>
+        <motion.h1 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
+          className="text-4xl md:text-6xl font-bold mb-2">{data.title}</motion.h1>
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
+          className="text-gray-400 text-lg mb-8">{data.songName} • {data.artist}</motion.p>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}
+          className="flex items-center justify-center gap-3">
+          <a href={data.songUrl} target="_blank" className="bg-green-500 text-black w-14 h-14 rounded-full flex items-center justify-center hover:scale-105 transition-transform shadow-lg shadow-green-500/30">
+            <Play className="w-6 h-6 ml-1" />
+          </a>
+          <span className="text-sm text-gray-500">Toque para ouvir a música</span>
         </motion.div>
       </div>
-      <div className="absolute bottom-0 w-full h-32 bg-gradient-to-t from-white to-transparent" />
+      <motion.button onClick={nextSection} animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 2 }}
+        className="absolute bottom-10 text-gray-600 hover:text-green-400 transition-colors">
+        <ChevronDown className="w-8 h-8" />
+      </motion.button>
     </section>
   )
 }
 
-function Counter({ days }: { days: number }) {
+function SectionTimeline({ nextSection }: { nextSection: () => void }) {
   return (
-    <section className="py-20 text-center bg-white">
-      <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} className="max-w-md mx-auto">
-        <Clock className="w-10 h-10 text-amor-rosado mx-auto mb-4" />
-        <p className="text-gray-400 uppercase text-xs tracking-[0.3em] mb-3 font-semibold">Juntos há</p>
-        <motion.p className="text-8xl md:text-9xl font-display font-bold bg-gradient-to-r from-amor-rosado to-amor-roxo bg-clip-text text-transparent"
-          initial={{ scale: 0.5 }} whileInView={{ scale: 1 }} transition={{ type: 'spring', stiffness: 100 }}>{days}</motion.p>
-        <p className="text-xl text-gray-400 mt-2">dias de amor</p>
-      </motion.div>
-    </section>
-  )
-}
-
-function SpotifyTimeline() {
-  return (
-    <section className="py-20 bg-gradient-to-b from-amor-noite to-indigo-950 text-white">
-      <div className="max-w-4xl mx-auto px-4">
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-16">
-          <p className="text-amor-rosado uppercase text-xs tracking-[0.3em] font-semibold mb-3">Nossa retrospectiva</p>
-          <h2 className="text-4xl md:text-5xl font-display font-bold">Linha do Tempo</h2>
+    <section className="min-h-[90vh] relative px-4 py-20">
+      <div className="max-w-2xl mx-auto">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-12">
+          <p className="text-green-500 text-xs font-semibold uppercase tracking-widest mb-2">Nossa história</p>
+          <h2 className="text-4xl md:text-5xl font-bold">Linha do Tempo</h2>
         </motion.div>
         <div className="relative">
-          <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-amor-rosado via-amor-roxo to-amor-dourado" />
-          {demo.timeline.map((item, i) => (
-            <motion.div key={i} initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 * i }}
-              className={`flex items-center mb-12 relative ${i % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}>
-              <div className={`w-1/2 ${i % 2 === 0 ? 'pr-12 text-right' : 'pl-12 text-left'}`}>
-                <div className="bg-white/10 backdrop-blur rounded-2xl p-6 hover:bg-white/15 transition-all">
-                  <p className="text-amor-rosado text-xs font-bold mb-1">{new Date(item.date).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-                  <h3 className="text-xl font-bold mb-1">{item.title}</h3>
-                  <p className="text-gray-400 text-sm">{item.desc}</p>
-                </div>
+          <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-green-500 via-green-600 to-transparent" />
+          {data.timeline.map((item, i) => (
+            <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.15 }}
+              className="flex items-start gap-6 mb-10 pl-4">
+              <div className="w-3 h-3 rounded-full bg-green-500 mt-2 -ml-[22px] z-10 shrink-0" />
+              <div>
+                <p className="text-green-500 text-xs font-bold mb-1">{new Date(item.date).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                <h3 className="text-xl font-bold mb-1">{item.title}</h3>
+                <p className="text-gray-400 text-sm">{item.desc}</p>
               </div>
-              <div className="absolute left-1/2 -translate-x-1/2 z-10">{item.icon}</div>
-              <div className="w-1/2" />
             </motion.div>
           ))}
         </div>
       </div>
-    </section>
-  )
-}
-
-function Gallery() {
-  return (
-    <section className="py-20 px-4">
-      <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-16">
-        <p className="text-amor-roxo uppercase text-xs tracking-[0.3em] font-semibold mb-3">Galeria</p>
-        <h2 className="text-4xl md:text-5xl font-display font-bold text-amor-noite">Nossos momentos</h2>
-      </motion.div>
-      <div className="max-w-5xl mx-auto columns-2 md:columns-3 gap-4">
-        {[...demo.photos, ...demo.photos].slice(0, 12).map((p, i) => (
-          <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="break-inside-avoid mb-4">
-            <img src={p} alt={`Foto ${i + 1}`} className="w-full rounded-2xl shadow-md hover:shadow-xl transition-shadow" />
-          </motion.div>
-        ))}
+      <div className="text-center mt-12">
+        <button onClick={nextSection} className="text-green-500 hover:text-green-400 text-sm flex items-center gap-1 mx-auto">
+          Continuar <ChevronDown className="w-4 h-4" />
+        </button>
       </div>
     </section>
   )
 }
 
-function MessageSection() {
+function SectionStats({ nextSection }: { nextSection: () => void }) {
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-amor-soft/50 to-white">
-      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} className="max-w-2xl mx-auto text-center">
-        <Sparkles className="w-10 h-10 text-amor-dourado mx-auto mb-6" />
-        <div className="bg-white rounded-3xl shadow-xl p-10 border border-amor-rosado/10">
-          <h3 className="text-2xl font-display font-bold text-amor-noite mb-6">Minha carta para você</h3>
-          <p className="text-lg text-gray-700 leading-relaxed italic">&ldquo;{demo.message}&rdquo;</p>
-          <div className="mt-6 flex items-center justify-center gap-2 text-amor-rosado">
-            <Heart className="w-5 h-5 fill-amor-rosado" />
-            <span className="text-sm font-semibold">Com todo meu amor, {demo.from}</span>
-          </div>
-        </div>
-        <div className="mt-8 p-6 bg-amor-roxo/5 rounded-2xl">
-          <div className="flex items-center gap-3">
-            <Music className="w-5 h-5 text-amor-roxo" />
-            <div className="text-left">
-              <p className="text-xs text-amor-roxo font-semibold">Trilha sonora</p>
-              <p className="text-gray-700 font-medium">{demo.music}</p>
-            </div>
-            <a href={demo.songUrl} target="_blank" className="ml-auto bg-amor-roxo text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-amor-roxo/80 transition-colors flex items-center gap-1">
-              <Play className="w-4 h-4" /> Ouvir
-            </a>
-          </div>
-        </div>
-      </motion.div>
-    </section>
-  )
-}
-
-function FinalSection({ days }: { days: number }) {
-  return (
-    <section className="py-24 text-center bg-gradient-to-b from-white to-amor-glow">
-      <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
-        <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ repeat: Infinity, duration: 1.5 }}>
-          <Heart className="w-24 h-24 text-amor-rosado fill-amor-rosado mx-auto mb-8" />
+    <section className="min-h-[90vh] relative px-4 py-20">
+      <div className="max-w-3xl mx-auto">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-12">
+          <p className="text-green-500 text-xs font-semibold uppercase tracking-widest mb-2">Em números</p>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">Nossa história em dados</h2>
+          <p className="text-gray-500">Alguns números que mostram o quanto você é especial</p>
         </motion.div>
-        <h2 className="text-5xl md:text-6xl font-display font-bold text-amor-noite mb-4">Eu te amo!</h2>
-        <p className="text-gray-500 text-xl mb-8">Obrigado por cada um dos {days} dias ao seu lado</p>
-        <div className="flex justify-center gap-4 flex-wrap">
-          <button className="bg-amor-roxo text-white px-8 py-4 rounded-full font-bold flex items-center gap-2 shadow-lg hover:shadow-xl transition-shadow">
-            <Share2 className="w-5 h-5" /> Compartilhar
-          </button>
-          <button className="border-2 border-amor-roxo text-amor-roxo px-8 py-4 rounded-full font-bold flex items-center gap-2 hover:bg-amor-roxo/5 transition-colors">
-            <QrCode className="w-5 h-5" /> QR Code
+
+        {/* Stats grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-12">
+          {data.stats.map((s, i) => (
+            <motion.div key={i} initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.1 }}
+              className="bg-gray-900 rounded-2xl p-6 text-center">
+              <div className="text-3xl mb-2">{s.icon}</div>
+              <div className="text-2xl md:text-3xl font-bold text-green-500 mb-1">{s.value}</div>
+              <div className="text-xs text-gray-500">{s.label}</div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Qualities */}
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center mb-8">
+          <h3 className="text-lg font-bold mb-4">O que eu mais admiro em você</h3>
+          <div className="flex flex-wrap justify-center gap-2">
+            {data.qualities.map((q, i) => (
+              <motion.span key={i} initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 + i * 0.1 }}
+                className="bg-green-500/10 text-green-400 border border-green-500/30 px-4 py-2 rounded-full text-sm font-medium">
+                {q}
+              </motion.span>
+            ))}
+          </div>
+        </motion.div>
+
+        <div className="text-center">
+          <button onClick={nextSection} className="text-green-500 hover:text-green-400 text-sm flex items-center gap-1 mx-auto">
+            Continuar <ChevronDown className="w-4 h-4" />
           </button>
         </div>
-      </motion.div>
+      </div>
     </section>
   )
 }
 
-function Banner() {
+function SectionCarta({ nextSection }: { nextSection: () => void }) {
+  const photos = data.photos
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-amor-noite/95 backdrop-blur-md text-white p-4 z-40">
-      <div className="max-w-4xl mx-auto flex items-center justify-between flex-wrap gap-3">
-        <p className="text-sm">✨ Este é um presente de demonstração</p>
-        <Link href="/criar" className="bg-gradient-to-r from-amor-roxo to-amor-rosado text-white px-6 py-2.5 rounded-full text-sm font-bold hover:scale-105 transition-transform flex items-center gap-1">
-          Criar o meu presente <Sparkles className="w-4 h-4" />
-        </Link>
+    <section className="min-h-[90vh] relative px-4 py-20">
+      <div className="max-w-2xl mx-auto">
+        {/* Photo collage */}
+        <div className="grid grid-cols-3 gap-2 mb-12">
+          {photos.slice(0, 3).map((p, i) => (
+            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.15 }}
+              className={i === 0 ? 'col-span-2 row-span-2' : ''}>
+              <img src={p} alt="" className={`w-full rounded-2xl object-cover ${i === 0 ? 'h-64' : 'h-32'}`} />
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Letter */}
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+          className="bg-gray-900 rounded-3xl p-8 md:p-10 border border-gray-800">
+          <Sparkles className="w-6 h-6 text-green-500 mb-4" />
+          <p className="text-gray-300 text-lg leading-relaxed mb-6">
+            &ldquo;{data.message}&rdquo;
+          </p>
+          <div className="flex items-center gap-3 pt-4 border-t border-gray-800">
+            <Heart className="w-5 h-5 text-green-500 fill-green-500" />
+            <div>
+              <p className="font-bold text-sm">{data.from}</p>
+              <p className="text-xs text-gray-500">Com todo meu carinho</p>
+            </div>
+          </div>
+        </motion.div>
+
+        <div className="text-center mt-10">
+          <button onClick={nextSection} className="bg-green-500 text-black px-8 py-3 rounded-full font-bold hover:bg-green-400 transition-all flex items-center gap-2 mx-auto">
+            <Gift className="w-4 h-4" /> Revelar surpresa final
+          </button>
+        </div>
       </div>
-    </div>
+    </section>
+  )
+}
+
+function SectionFinal() {
+  return (
+    <section className="min-h-[90vh] flex flex-col items-center justify-center px-4 text-center">
+      {[...Array(20)].map((_, i) => (
+        <motion.div key={i} className="absolute bg-green-500 rounded-full"
+          style={{ left: Math.random()*100+'%', top: Math.random()*100+'%', width: Math.random()*3+1+'px', height: Math.random()*3+1+'px' }}
+          animate={{ opacity: [0,1,0], scale: [0.5,1.5,0.5] }} transition={{ repeat: Infinity, duration: 2+Math.random()*3, delay: Math.random()*3 }} />
+      ))}
+      <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ repeat: Infinity, duration: 1.5 }} className="mb-8">
+        <Heart className="w-32 h-32 text-green-500 fill-green-500" />
+      </motion.div>
+      <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+        className="text-5xl md:text-7xl font-bold mb-4">Eu te amo!</motion.h1>
+      <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
+        className="text-gray-400 text-xl mb-4">Obrigado por ser quem você é</motion.p>
+      <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
+        className="text-gray-600 text-sm">Com amor, {data.from} 💚</motion.p>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }}
+        className="mt-12 flex gap-3">
+        <Link href="/" className="bg-gray-800 text-white px-6 py-3 rounded-full font-semibold hover:bg-gray-700 transition-colors">
+          Criar o seu presente
+        </Link>
+      </motion.div>
+    </section>
   )
 }
